@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+        crossorigin="anonymous" />
+    <title>BookList App</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="heading">
+            <i class="fas fa-book-open fa-3x primary-text"></i>
+            <h2>My<span class="primary-text">Book</span>List</h2>
+        </div>
+        <form id="my-form">
+            <div class="form-group">
+                <label class="title">Title</label>
+                <input type="text" id="title">
+            </div>
+            <div class="form-group">
+                <label class="author">Author</label>
+                <input type="text" id="author">
+            </div>
+            <div class="form-group">
+                <label class="isbn">ISBN#</label>
+                <input type="text" id="isbn">
+            </div>
+            <input type="button" value="Add Book" class="btn primary-btn">
+        </form>
+        <table id="table" class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN#</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</body>
+
+</html>
