@@ -68,6 +68,8 @@ class UI {
         const msg = document.createElement('div')
         msg.innerHTML = message
         msg.classList.add('message', status)
+        
+        //Add msg class after the heading
         div.after(msg)
 
         //clear after 3 seconds
