@@ -6,42 +6,63 @@ class Book {
         this.isbn = isbn
     }
 }
+
+//Store Class - for local storage. Local storage stores items as strings and not as objects 
+//so everytime we save the json we need to stringy it and while retrieving we need to parse the string 
+//back to json
+class Store {
+    static getBooks() {
+        let books
+        if (localStorage.getItem('books') === null) {
+            books = []
+        } else {
+            books = JSON.parse(localStorage.getItem('books'))
+        }
+        return books
+    }
+    static addBook(book) {
+        let books = Store.getBooks()
+        books.push(book)
+        localStorage.setItem('books', JSON.stringify(books))
+    }
+    static removeBook(isbn) {
+        let books = Store.getBooks()
+        books.forEach((b, index) => {
+            if (b.isbn === isbn) {
+                books.splice(index, 1)
+            }
+        })
+        localStorage.setItem('books', JSON.stringify(books))
+    }
+}
+
+
 //UI Class - to handle UI events
 class UI {
 
-    //function to display list of added books
     static displayBooks() {
-        let books = [
-            {
-                title: 'Book 1',
-                author: 'Asha',
-                isbn: '12213231312'
-            },
-            {
-                title: 'Book 2',
-                author: 'Monica',
-                isbn: '76876876'
-            }
-        ]
+        const books = Store.getBooks()
         books.forEach(book => {
-            UI.addBook(book);
+            UI.addBookToList(book);
         })
     }
-    //function to add a new book
-    static addBook(book) {
+    static addBookToList(book) {
         let row = document.createElement('tr')
         row.innerHTML = `<td>${book.title}</td><td>${book.author}</td>
             <td>${book.isbn}</td>
             <td><a href="#" class="delete" >X</a></td>`
         document.querySelector('#book-list').appendChild(row)
+        UI.clearFields()
     }
 
-    // function to remove book
-    static removeBook() {
-        console.log(this)
+    static removeBook(e) {
+        if (e.classList.contains('delete')) {
+            e.parentElement.parentElement.remove();
+            let message = 'Book removed'
+            UI.showAlert(message, 'success')
+        }
     }
 
-    //Alert
     static showAlert(message, status) {
         const div = document.querySelector('.heading')
         const msg = document.createElement('div')
@@ -52,11 +73,12 @@ class UI {
         //clear after 3 seconds
         setTimeout(() => msg.remove(), 3000)
     }
+    static clearFields() {
+        document.querySelector("#title").value = ''
+        document.querySelector("#author").value = ''
+        document.querySelector("#isbn").value = ''
+    }
 }
-
-//Store Class - for local storage
-
-//Events
 
 /* Display all the books that have been added, on document load */
 document.addEventListener('DOMContentLoaded', UI.displayBooks)
@@ -72,7 +94,8 @@ document.querySelector("#my-form").addEventListener('submit', (e) => {
         let message = 'Please fill all the fields'
         UI.showAlert(message, 'error')
     } else {
-        UI.addBook(book)
+        UI.addBookToList(book)
+        Store.addBook(book);
         let message = 'Book added'
         UI.showAlert(message, 'success')
     }
@@ -80,4 +103,7 @@ document.querySelector("#my-form").addEventListener('submit', (e) => {
 })
 
 /* Remove book */
-
+document.querySelector('#book-list').addEventListener('click', (e) => {
+    UI.removeBook(e.target)
+    Store.removeBook(e.target.parentElement.previousElementSibling.textContent)
+})
